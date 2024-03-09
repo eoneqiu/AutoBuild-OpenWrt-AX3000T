@@ -35,8 +35,8 @@ env:
   UPLOAD_FIRMWARE: true
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_ONEFICHIER: true
-  UPLOAD_DOWNLOADGG: true
+  UPLOAD_ONEFICHIER: false
+  UPLOAD_DOWNLOADGG: false
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
@@ -192,7 +192,7 @@ jobs:
         echo "**源码：** ${{ env.REPO_URL }}" >> release.txt
         echo  "**分支：** ${{ env.REPO_BRANCH }}" >> release.txt
         echo "**WIFI名：** Einstar" >> release.txt
-        echo "**后台地址：** 192.168.1.2" >> release.txt
+        echo "**后台地址：** 192.168.2.7" >> release.txt
         echo "**默认管理用户：** root" >> release.txt
         echo "**默认管理密码：** 无" >> release.txt
         [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
@@ -215,17 +215,17 @@ jobs:
         body_path: release.txt
         files: ${{ env.FIRMWARE }}/*
         
-    - name: Bark-Push
-      uses: harryzcy/action-bark@v2.0.2
-      with:
-          status: ${{ job.status }}
-          # on_status: failure, cancelled # only run on these status
-          title: AutoBuild-OpenWrt
-          body: "${{ steps.tag.outputs.release_tag }}_AX3000T编译结束：${{ toJson(steps.tag.outputs) }}"
-          device_key: ${{ secrets.BARK_DEVICE_KEY }}
-          level: passive # iOS notification level 'active', 'timeSensitive' or 'passive', default to 'active'
-          bark_server_url: ${{ secrets.BARK_SERVER_URL }}
-      if: always() # Pick up events even if the job fails or is canceled.
+    # - name: Bark-Push
+    #   uses: harryzcy/action-bark@v2.0.2
+    #   with:
+    #       status: ${{ job.status }}
+    #       # on_status: failure, cancelled # only run on these status
+    #       title: AutoBuild-OpenWrt
+    #       body: "${{ steps.tag.outputs.release_tag }}_AX3000T编译结束：${{ toJson(steps.tag.outputs) }}"
+    #       device_key: ${{ secrets.BARK_DEVICE_KEY }}
+    #       level: passive # iOS notification level 'active', 'timeSensitive' or 'passive', default to 'active'
+    #       bark_server_url: ${{ secrets.BARK_SERVER_URL }}
+    #   if: always() # Pick up events even if the job fails or is canceled.
       
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
